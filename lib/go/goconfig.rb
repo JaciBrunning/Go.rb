@@ -15,11 +15,15 @@ module Go
     end
 
     def self.create(max_threads = 10)
+      @@config = Config.new(max_threads)
+    end
+
+    def self.maybe_create(max_threads = 10)
       @@config ||= Config.new(max_threads)
     end
 
     def self.get
-      create
+      maybe_create
       @@config
     end
 
