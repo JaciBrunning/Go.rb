@@ -1,5 +1,5 @@
 # Go.rb
-The features of the 'Go' language without the weird syntax.
+The features of the 'Go' language without the weird syntax.  
 [![Gem Version](https://badge.fury.io/rb/Go.rb.svg)](http://badge.fury.io/rb/Go.rb)
 ## Why?
 Go is a language that specializes in Concurrency and Control Flow, but many people (myself included), don't like the choice of syntax and language features. Some people may also want these features available in a more common language, such as Ruby, which is why I created Go.rb, a Ruby Gem that brings the best features of 'Go' to Ruby.  
@@ -32,7 +32,7 @@ go do
   sleep 1
   puts "Hello World"
 end
-go {puts "Goodbye World"}
+go { puts "Goodbye World" }
 
 # => Goodbye World
 # => Hello World
