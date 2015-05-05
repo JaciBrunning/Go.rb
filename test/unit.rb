@@ -28,6 +28,8 @@ class GoUnit < Test::Unit::TestCase
 
     puts Go::Config.get.thread_pool.status
     assert_equal(Go::Config.get.thread_pool.workers, 5)
+    Go::Config.get.thread_pool.shutdown
+    assert_equal(Go::Config.get.thread_pool.running?, false)
     puts "Threadpool Growth Tests Complete"
   end
 
