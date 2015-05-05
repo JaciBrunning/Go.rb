@@ -31,7 +31,7 @@ module Go
       end
 
       def errored?
-        @ex
+        !@ex.nil?
       end
 
       def get

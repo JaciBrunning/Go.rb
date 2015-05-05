@@ -36,7 +36,7 @@ module Go
       end
 
       def execute(&block)
-        execute_proc(args, block)
+        return execute_proc(block)
       end
 
       def execute_proc(proc)

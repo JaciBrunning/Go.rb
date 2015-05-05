@@ -11,6 +11,7 @@ class GoUnit < Test::Unit::TestCase
     Go::Config.create(5)
 
     assert_equal(Go::Config.get.thread_pool.max, 5)
+    assert_equal(Go::Config.get.max_thread_count, 5)
     assert_equal(Go::Config.get.thread_pool.workers, 0)
 
     fut1 = go { puts "Testing 1 Routine" }
@@ -25,9 +26,8 @@ class GoUnit < Test::Unit::TestCase
     fut1.wait
     fut2.wait
 
-    assert_equal(Go::Config.get.thread_pool.workers, 5)
-
     puts Go::Config.get.thread_pool.status
+    assert_equal(Go::Config.get.thread_pool.workers, 5)
     puts "Threadpool Growth Tests Complete"
   end
 
@@ -54,8 +54,32 @@ class GoUnit < Test::Unit::TestCase
     puts "Threadpool Static Tests Complete"
   end
 
+  def test_routine_exception
+    puts "Running Routine Failure Tests"
+    futureFailed = go do
+      puts "Future Failing"
+      raise "New Exception"
+    end
+
+    state = false
+    futureFailed.wait
+    assert_equal(futureFailed.errored?, true)
+    begin
+      futureFailed.get
+      state = false
+      puts "Future Exception Test Failed"
+    rescue Exception => e
+      state = true
+      puts "Future Exception Test Successful"
+    ensure
+      assert_equal(state, true)
+      puts "End Routines Failure Test"
+    end
+  end
+
   def test_routines
     puts "Running Routines Tests"
+    Go::Config.create()
     future1 = go do
       puts "Future 1"
       5 * 2
@@ -70,4 +94,21 @@ class GoUnit < Test::Unit::TestCase
     assert_equal(future2.get, 4)
     puts "Routines Tests Complete"
   end
+
+  def test_pool_standalone
+    puts "Testing Standalone Pool"
+    pool = Go::CC::ThreadPool.new
+
+    future = pool.execute {
+      puts "Testing Standalone"
+      sleep 1.5
+      5 * 2
+    }
+
+    assert_equal(future.complete?, false)
+    assert_equal(future.get, 10)
+
+    puts "Standalone Pool Test Successful"
+  end
+
 end

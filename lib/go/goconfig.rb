@@ -6,7 +6,7 @@ module Go
       @pool = Go::CC::ThreadPool.new(max_threads, growing)
     end
 
-    def thread_count
+    def max_thread_count
       @threads
     end
 
