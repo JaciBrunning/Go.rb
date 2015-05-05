@@ -11,7 +11,6 @@ module Go
         @growing = growing
         @workQueue = Queue.new
         @running = true
-        @shutting_down = false
 
         initStatic() unless @growing
       end

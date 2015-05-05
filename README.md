@@ -1,6 +1,6 @@
 # Go.rb
 The features of the 'Go' language without the weird syntax.  
-[![Gem Version](https://badge.fury.io/rb/Go.rb.svg)](http://badge.fury.io/rb/Go.rb)
+[![Build Status](https://travis-ci.org/JacisNonsense/Go.rb.svg?branch=master)](https://travis-ci.org/JacisNonsense/Go.rb)  [![Gem Version](https://badge.fury.io/rb/Go.rb.svg)](http://badge.fury.io/rb/Go.rb)  [![Coverage Status](https://coveralls.io/repos/JacisNonsense/Go.rb/badge.svg)](https://coveralls.io/r/JacisNonsense/Go.rb) 
 ## Why?
 Go is a language that specializes in Concurrency and Control Flow, but many people (myself included), don't like the choice of syntax and language features. Some people may also want these features available in a more common language, such as Ruby, which is why I created Go.rb, a Ruby Gem that brings the best features of 'Go' to Ruby.  
 

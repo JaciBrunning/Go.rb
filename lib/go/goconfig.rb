@@ -1,9 +1,9 @@
 module Go
   class Config
 
-    def initialize(max_threads)
+    def initialize(max_threads, growing = true)
       @threads = max_threads
-      @pool = Go::CC::ThreadPool.new(max_threads)
+      @pool = Go::CC::ThreadPool.new(max_threads, growing)
     end
 
     def thread_count
@@ -14,8 +14,8 @@ module Go
       @pool
     end
 
-    def self.create(max_threads = 10)
-      @@config = Config.new(max_threads)
+    def self.create(max_threads = 10, growing = true)
+      @@config = Config.new(max_threads, growing)
     end
 
     def self.maybe_create(max_threads = 10)
