@@ -61,6 +61,7 @@ module Go
 
       def shutdown
         @running = false
+        @threads.each { |t| t.kill }
       end
 
       def max; @max end

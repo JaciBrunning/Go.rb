@@ -113,4 +113,16 @@ class GoUnit < Test::Unit::TestCase
     puts "Standalone Pool Test Successful"
   end
 
+  def test_engine
+    puts "Testing Engine"
+    engine = Go::Engine.new
+    engine.go { puts "Hello World" }
+    fut2 = engine.go do
+      puts "Goodbye World"
+    end
+    fut2.wait
+    engine.config.thread_pool.shutdown
+    puts "Finished Testing Engine"
+  end
+
 end
