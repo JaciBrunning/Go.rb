@@ -6,7 +6,10 @@ future2 = go { puts "Hello World2"; "Solu" }
 puts future1.get
 puts future2.get
 
-# => Hello World2
-# => Hello World1
-# => Done
-# => Solu
+yourself = gochan
+
+gofork yourself do |chan|
+  chan.puts "Test String pls Ignore"
+end
+
+puts "#{yourself.gets}"
