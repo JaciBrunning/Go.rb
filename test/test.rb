@@ -1,15 +1,13 @@
 $LOAD_PATH << File.expand_path( File.dirname(__FILE__) + '/../lib' )
 require 'go'
 
-future1 = go { sleep 1; puts "Hello World1"; "Done" }
-future2 = go { puts "Hello World2"; "Solu" }
-puts future1.get
-puts future2.get
+channel = gochan
+go(channel) { |chan| chan << "Hello World" }
+go(channel) { |chan| puts chan.get; chan << "How's it going?" }
+puts channel.get
 
-yourself = gochan
+puts
 
-gofork yourself do |chan|
-  chan.puts "Test String pls Ignore"
-end
-
-puts "#{yourself.gets}"
+pipe = gopipe
+gofork(pipe) { |pipe| pipe.puts "Hi from another Process" }
+puts pipe.gets

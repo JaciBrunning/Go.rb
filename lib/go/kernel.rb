@@ -4,12 +4,16 @@
 # Author::  Jaci Brunning
 module ::Kernel
 
-  def go(&block)
-    Go::Config.get().thread_pool().execute_proc(block)
+  def go(*channels, &block)
+    Thread.new *channels, &block
   end
 
-  def gofork(*channels, &block)
-    Go::Process.new *channels, &block
+  def gofork(*pipes, &block)
+    Go::Process.new *pipes, &block
+  end
+
+  def gopipe
+    Go::Pipe.new
   end
 
   def gochan

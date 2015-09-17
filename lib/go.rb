@@ -1,7 +1,12 @@
 require "go/version"
-require "go/concurrency/pool"
-require "go/goconfig"
 require "go/kernel"
-require "go/engine"
-require "go/process/goprocess"
-require "go/process/channel"
+require "go/pipe"
+require "go/process"
+
+module Go
+  class Channel < Queue
+    def get nonblock=false
+      pop nonblock
+    end
+  end
+end

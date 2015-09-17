@@ -1,12 +1,12 @@
 module Go
-  class Channel
+  class Pipe
 
     def initialize
       @reader, @writer = IO.pipe
     end
 
-    def puts data
-      @writer.puts data
+    def puts data=""
+      writer.puts data
     end
 
     def << data
@@ -14,19 +14,15 @@ module Go
     end
 
     def gets
-      @reader.gets
+      reader.gets
     end
 
     def write data
-      @writer.write data
+      writer.write data
     end
 
-    def read length=-1
-      if length == -1
-        @reader.read
-      else
-        @reader.read length
-      end
+    def read length
+      reader.read length
     end
 
     def reader
@@ -42,8 +38,8 @@ module Go
     end
 
     def destroy
-      @reader.close
-      @writer.close
+      reader.close
+      writer.close
       @reader = nil
       @writer = nil
     end
