@@ -1,8 +1,10 @@
 # Go.rb
-The features of the 'Go' language without the weird syntax.  
+A lightweight Ruby concurrency system with multi-thread and multi-process support with Pipes and Channels.
 [![Build Status](https://travis-ci.org/JacisNonsense/Go.rb.svg?branch=master)](https://travis-ci.org/JacisNonsense/Go.rb)  [![Gem Version](https://badge.fury.io/rb/Go.rb.svg)](http://badge.fury.io/rb/Go.rb)  [![Coverage Status](https://coveralls.io/repos/JacisNonsense/Go.rb/badge.svg)](https://coveralls.io/r/JacisNonsense/Go.rb) [![Code Climate](https://codeclimate.com/github/JacisNonsense/Go.rb/badges/gpa.svg)](https://codeclimate.com/github/JacisNonsense/Go.rb)
 ## Why?
-Go is a language that specializes in Concurrency and Control Flow, but many people (myself included), don't like the choice of syntax and language features. Some people may also want these features available in a more common language, such as Ruby, which is why I created Go.rb, a Ruby Gem that brings the best features of 'Go' to Ruby.  
+Go.rb is inspired by the 'Go' programming language. 'Go' excels in concurrency, so I decided to recreate some of these
+features in Ruby. This includes easy creation and management of Threads and Process-Forking. Channels allow communication
+across Threads and Pipes allow for data interchange across Processes.
 
 ## Getting Started
 Getting started with Go.rb is very simple. First, install the Gem:
@@ -21,8 +23,8 @@ require 'go'
 go { puts "Hello World" }
 go { puts "Goodbye World" }
 
-# => Hello World
-# => Goodbye World
+# => "Hello World"
+# => "Goodbye World"
 ```
 In the above case, both "Hello World" and "Goodbye World" are executed in their own, individual threads.
 ```ruby
@@ -34,28 +36,52 @@ go do
 end
 go { puts "Goodbye World" }
 
-# => Goodbye World
-# => Hello World
+# => "Goodbye World"
+# => "Hello World"
 ```
-Additionally, we also support 'Futures', a way to get the return value of a goroutine, or an Exception if one occurred. This also serves as a way of waiting for a goroutine to execute.  
+Additionally, Multiple Processes are supported.
 ```ruby
 require 'go'
 
-future = go do
-  puts "Hello World"
-  sleep 3
-  5 * 2
-end
+gofork { puts "Hello from another Process" }
+gofork { sleep 1 }.wait
 
-puts future.get
-
-# => Hello World
-# *3 seconds later*
-# => 10
+# => "Hello from another Process"
+# => *waits 1 second before exiting*
 ```
-```future.get``` and ```future.wait``` will both block the current thread until the goroutine has completed executing. ```wait``` will yield nil and ```get``` will yield the result (return) of the goroutine, or raise an exception if there was an error during execution.
 
-## Future Plans
-- Defer
-- Panic
-- Resolve (might not be possible)
+For communication across Threads, a Channels system is implemented. Channels can hold any object
+```ruby
+require 'go'
+
+channel = gochan    # Create a new Channel
+go(channel) { |chan| chan << "Hello World" }
+puts channel.get
+
+# => "Hello World"
+
+channel << "Hi Earth"
+channel2 = gochan
+go(channel, channel2) { |chan, chan2| chan2 << chan.get }
+puts channel2.get
+
+# => "Hi Earth"
+```
+
+For communication across Processes, a Pipes system is implemented. Objects can not be transferred
+across processes, only byte streams like binary strings.
+```ruby
+require 'go'
+
+pipe = gopipe
+gofork(pipe) { |pipe| pipe << "Hello" }
+puts pipe.read(5)
+
+# => "Hello"
+
+pipe.puts "Hello World"
+gofork(pipe) { |pipe| puts pipe.gets }
+
+# => "Hello World"
+pipe.close
+```
